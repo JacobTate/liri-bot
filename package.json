@@ -1,0 +1,19 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "Homework liri bot",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacobTate/liri-bot.git"
+  },
+  "author": "Jmt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JacobTate/liri-bot/issues"
+  },
+  "homepage": "https://github.com/JacobTate/liri-bot#readme"
+}
