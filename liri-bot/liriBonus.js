@@ -38,12 +38,15 @@ inquirer
   ]).then(function (inquirerRes) {
     console.log(inquirerRes.function);
     switch (inquirerRes.function) {
-      case "spotify-this-song":
+      case "s":
         getMeSpotify();
         break;
       case "concert-this":
         getMyBands(inquirerRes.value);
         break;
+        case "movie-this":
+          getMeMovie(inquirerRes.value);
+          break;
     }
   })
 
@@ -103,18 +106,20 @@ var getMeSpotify = function (songName) {
     * The Spotify API requires you sign up as a developer to generate the necessary credentials. You can follow these steps in order to generate a client id and client secret:
 
   */
-var x = "57e4e05a2f9846adab5dfced3a84f7fc";
-var y = "abe9fa9e17bc44d69907679d6af15ce6";
+var id = "57e4e05a2f9846adab5dfced3a84f7fc";
+var secret = "abe9fa9e17bc44d69907679d6af15ce6";
 
    var spotify = new Spotify({
-    id: x,
-    secret: y
+    id: id,
+    secret: secret
   });
 
   spotify
-    .search({ type: 'track', query: "ghoast riders in the sky"})
+    .search({
+       type: 'track',
+        query: "ghoast riders in the sky"})
     .then(function(response) {
-      console.log(response);
+      console.log(response.tracks.items);
     })
     .catch(function(err) {
       console.log(err);
@@ -198,13 +203,15 @@ var getMeMovie = function (movieName) {
   }
 
   //FIXME: 
-  var urlHit = "CREATE-THE-URL-HERE";
+  var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
   axios.get(urlHit).then(
     function (response) {
       var jsonData = response.data;
 
       //FIXME: Finish the code below
+      console.log(response.data.Title + " " + response.data.Released + " " + response.data.Ratings[0].Value + " " + response.data.Ratings[1].Value + " " + response.data.Country + " " + response.data.Language + " " + response.data.Plot +  " " +response.data.Actors);
+      
     }
   );
 };
