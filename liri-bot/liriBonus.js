@@ -1,6 +1,6 @@
 // DEPENDENCIES
 // =====================================
-
+var inquirer = require("inquirer")
 // Read and set environment variables
 require("dotenv").config();
 
@@ -24,9 +24,32 @@ var spotify = new Spotify(keys.spotify);
 
 // FUNCTIONS
 // =====================================
+inquirer
+  .prompt([{
+      type: "input",
+      message: "enter a function",
+      name: "function"
+    },
+    {
+      type: "input",
+      message: "enter a value",
+      name: "value"
+    }
+  ]).then(function (inquirerRes) {
+    console.log(inquirerRes.function);
+    switch (inquirerRes.function) {
+      case "spotify-this-song":
+        getMeSpotify();
+        break;
+      case "concert-this":
+        getMyBands(inquirerRes.value);
+        break;
+    }
+  })
+
 
 // Writes to the log.txt file
-var writeToLog = function(data) {
+var writeToLog = function (data) {
 
   /** FIXME: BONUS
    * 
@@ -37,19 +60,21 @@ var writeToLog = function(data) {
       Make sure you append each command you run to the log.txt file.
 
       Do not overwrite your file each time you run a command.
-    */ 
+    */
 
-    // Append the JSON data and add a newline character to the end of the log.txt file
+  // Append the JSON data and add a newline character to the end of the log.txt file
 
 };
 
 // Helper function that gets the artist name
-var getArtistNames = function(artist) {
+var getArtistNames = function (artist) {
   return artist.name;
 };
 
 // Function for running a Spotify search
-var getMeSpotify = function(songName) {
+var getMeSpotify = function (songName) {
+
+
   if (songName === undefined) {
     songName = "What's my age again";
   }
@@ -57,6 +82,8 @@ var getMeSpotify = function(songName) {
   /** TODO: Write the code to exceute the command below. 
    * 
    *      node liri.js spotify-this-song '<song name here>'
+   * 
+   * 
    * 
 
     * This will show the following information about the song in your terminal/bash window
@@ -76,11 +103,29 @@ var getMeSpotify = function(songName) {
     * The Spotify API requires you sign up as a developer to generate the necessary credentials. You can follow these steps in order to generate a client id and client secret:
 
   */
-  spotify.search();
+var x = "57e4e05a2f9846adab5dfced3a84f7fc";
+var y = "abe9fa9e17bc44d69907679d6af15ce6";
+
+   var spotify = new Spotify({
+    id: x,
+    secret: y
+  });
+
+  spotify
+    .search({ type: 'track', query: "ghoast riders in the sky"})
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+    spotify.search();
 };
 
+
+
 // Function for concert search
-var getMyBands = function(artist) {
+var getMyBands = function (artist) {
 
   /** TODO: Write the code to exceute the command below. 
    * 
@@ -93,13 +138,25 @@ var getMyBands = function(artist) {
       Important: There is no need to sign up for a Bands in Town api_id key. Use the codingbootcamp as your app_id. 
    * 
   */
- //FIXME: 
-  var queryURL = "CREATE-THE-URL-HERE";
+  //FIXME: 
+  var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
+
 
   axios.get(queryURL).then(
 
-    
-    function(response){
+
+    function (response) {
+      var res = response.data
+
+      for (let i = 0; i < res.length; i++) {
+        console.log(res[i].venue.name + ", " + res[i].venue.city + ", " + res[i].venue.region + ": " + moment(res[i].datetime).format("MM/DD/YYYY"));
+      }
+
+
+
+
+
+
       var jsonData = response.data;
 
       if (!jsonData.length) {
@@ -111,31 +168,31 @@ var getMyBands = function(artist) {
 
       logData.push("Upcoming concerts for " + artist + ":");
 
-      //FIXME: Finish the code below
+
 
     }
   );
 };
 
-  /** TODO: Write the code to exceute the command below. 
-   * 
-   *        node liri.js movie-this '<movie name here>'
-   * 
-   *   This will output the following information to your terminal/bash window:
-   * 
-        1. Title of the movie.
-        2. Year the movie came out.
-        3. IMDB Rating of the movie.
-        3. Rotten Tomatoes Rating of the movie.
-        4. Country where the movie was produced.
-        5. Language of the movie.
-        6. Plot of the movie.
-        7. Actors in the movie.
+/** TODO: Write the code to exceute the command below. 
+ * 
+ *        node liri.js movie-this '<movie name here>'
+ * 
+ *   This will output the following information to your terminal/bash window:
+ * 
+      1. Title of the movie.
+      2. Year the movie came out.
+      3. IMDB Rating of the movie.
+      3. Rotten Tomatoes Rating of the movie.
+      4. Country where the movie was produced.
+      5. Language of the movie.
+      6. Plot of the movie.
+      7. Actors in the movie.
 
-      If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.' 
-  */
+    If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.' 
+*/
 // Function for running a Movie Search
-var getMeMovie = function(movieName) {
+var getMeMovie = function (movieName) {
   if (movieName === undefined) {
     movieName = "Mr Nobody";
   }
@@ -144,7 +201,7 @@ var getMeMovie = function(movieName) {
   var urlHit = "CREATE-THE-URL-HERE";
 
   axios.get(urlHit).then(
-    function(response) {
+    function (response) {
       var jsonData = response.data;
 
       //FIXME: Finish the code below
@@ -153,31 +210,30 @@ var getMeMovie = function(movieName) {
 };
 
 // Function for running a command based on text file
-var doWhatItSays = function() {
-  fs.readFile("random.txt", "utf8", function(error, data) {
+var doWhatItSays = function () {
+  fs.readFile("random.txt", "utf8", function (error, data) {
     console.log(data);
 
     var dataArr = data.split(",");
 
     if (dataArr.length === 2) {
       pick(dataArr[0], dataArr[1]);
-    }
-    else if (dataArr.length === 1) {
+    } else if (dataArr.length === 1) {
       pick(dataArr[0]);
     }
   });
 };
 
 // Function for determining which command is executed
-var pick = function(command, commandData) {
-      //TODO:  Write your code below
-      // This will be the main function to control which method to call. See function "runThis" is calling this pick method
+var pick = function (command, commandData) {
+  //TODO:  Write your code below
+  // This will be the main function to control which method to call. See function "runThis" is calling this pick method
 
- 
+
 };
 
 // Function which takes in command line arguments and executes correct function accordingly
-var runThis = function(argOne, argTwo) {
+var runThis = function (argOne, argTwo) {
   pick(argOne, argTwo);
 };
 

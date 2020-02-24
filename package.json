@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/JacobTate/liri-bot/issues"
   },
-  "homepage": "https://github.com/JacobTate/liri-bot#readme"
+  "homepage": "https://github.com/JacobTate/liri-bot#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.0.4",
+    "keys": "^0.1.2",
+    "moment": "^2.24.0",
+    "node-spotify-api": "^1.1.1"
+  }
 }
