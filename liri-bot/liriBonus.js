@@ -24,31 +24,37 @@ var spotify = new Spotify(keys.spotify);
 
 // FUNCTIONS
 // =====================================
-inquirer
-  .prompt([{
-      type: "input",
-      message: "enter a function",
-      name: "function"
-    },
-    {
-      type: "input",
-      message: "enter a value",
-      name: "value"
-    }
-  ]).then(function (inquirerRes) {
-    console.log(inquirerRes.function);
-    switch (inquirerRes.function) {
-      case "s":
-        getMeSpotify();
-        break;
-      case "concert-this":
-        getMyBands(inquirerRes.value);
-        break;
+if (!process.argv[2]) {
+  inquirer
+    .prompt([{
+        type: "input",
+        message: "enter a function",
+        name: "function"
+      },
+      {
+        type: "input",
+        message: "enter a value",
+        name: "value"
+      }
+    ]).then(function (inquirerRes) {
+      console.log(inquirerRes.function);
+      switch (inquirerRes.function) {
+        case "s":
+          if (!inquirerRes.value) {
+            getMeSpotify("What's my age again")
+          } else {
+            getMeSpotify(inquirerRes.value);
+          }
+          break;
+        case "concert-this":
+          getMyBands(inquirerRes.value);
+          break;
         case "movie-this":
           getMeMovie(inquirerRes.value);
           break;
-    }
-  })
+      }
+    })
+}
 
 
 // Writes to the log.txt file
@@ -77,54 +83,24 @@ var getArtistNames = function (artist) {
 // Function for running a Spotify search
 var getMeSpotify = function (songName) {
 
+  console.log(songName);
 
-  if (songName === undefined) {
-    songName = "What's my age again";
-  }
-
-  /** TODO: Write the code to exceute the command below. 
-   * 
-   *      node liri.js spotify-this-song '<song name here>'
-   * 
-   * 
-   * 
-
-    * This will show the following information about the song in your terminal/bash window
-
-        1. Artist(s)
-
-        2. The song's name
-
-        3. A preview link of the song from Spotify
-
-        4. The album that the song is from
-
-    * If no song is provided then your program will default to "The Sign" by Ace of Base.
-
-    * You will utilize the node-spotify-api package in order to retrieve song information from the Spotify API.
-
-    * The Spotify API requires you sign up as a developer to generate the necessary credentials. You can follow these steps in order to generate a client id and client secret:
-
-  */
-var id = "57e4e05a2f9846adab5dfced3a84f7fc";
-var secret = "abe9fa9e17bc44d69907679d6af15ce6";
-
-   var spotify = new Spotify({
-    id: id,
-    secret: secret
-  });
-
+  // if (songName === undefined) {
+  //   songName = "What's my age again";
+  // }
+  //songName = 'I Want it That Way'
   spotify
     .search({
-       type: 'track',
-        query: "ghoast riders in the sky"})
-    .then(function(response) {
-      console.log(response.tracks.items);
+      type: 'track',
+      query: songName
     })
-    .catch(function(err) {
+    .then(function (response) {
+      console.log(response.tracks.items[0].album.artists);
+    })
+    .catch(function (err) {
       console.log(err);
     });
-    spotify.search();
+  spotify.search();
 };
 
 
@@ -202,6 +178,7 @@ var getMeMovie = function (movieName) {
     movieName = "Mr Nobody";
   }
 
+
   //FIXME: 
   var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
@@ -210,8 +187,23 @@ var getMeMovie = function (movieName) {
       var jsonData = response.data;
 
       //FIXME: Finish the code below
-      console.log(response.data.Title + " " + response.data.Released + " " + response.data.Ratings[0].Value + " " + response.data.Ratings[1].Value + " " + response.data.Country + " " + response.data.Language + " " + response.data.Plot +  " " +response.data.Actors);
-      
+    
+console.log("Movie title: " + jsonData.Title);
+console.log("Release Data: " + jsonData.Released);
+console.log("IMDB Rating: " + jsonData.Ratings[0].Value);
+console.log("Rotton Tomatoes: " + jsonData.Ratings[1].Value);
+console.log("Contry produced: " + jsonData.Country);
+console.log("Language: " +  jsonData.Language);
+console.log("Plot: " + jsonData.Plot);
+console.log("Actors: " + jsonData.Actors);
+
+
+
+
+
+
+
+
     }
   );
 };
@@ -220,17 +212,23 @@ var getMeMovie = function (movieName) {
 var doWhatItSays = function () {
   fs.readFile("random.txt", "utf8", function (error, data) {
     console.log(data);
-
     var dataArr = data.split(",");
-
     if (dataArr.length === 2) {
       pick(dataArr[0], dataArr[1]);
     } else if (dataArr.length === 1) {
       pick(dataArr[0]);
     }
+
+
   });
+  
+
+  
 };
 
+if (process.argv[2] === "do-what-it-says") {
+  doWhatItSays();
+}
 // Function for determining which command is executed
 var pick = function (command, commandData) {
   //TODO:  Write your code below
@@ -247,3 +245,4 @@ var runThis = function (argOne, argTwo) {
 // MAIN PROCESS
 // =====================================
 runThis(process.argv[2], process.argv.slice(3).join(" "));
+
