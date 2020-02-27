@@ -33,10 +33,10 @@ Bonus if You enter node (fileName.js) do-what-it-says You will see a the song: I
 Here is a <a href="https://youtu.be/Tu2cmcbT_rM" target="_blank">video</a> showing all of the functions 
 
 Dependencys used:
-- <a href="https://www.npmjs.com/package/inquirer" target="_blank">inquirer</a>
-- <a href="https://www.npmjs.com/package/node-spotify-api" target="_blank">node-spotify-api</a>
-- <a href="https://www.npmjs.com/package/axios" target="_blank">axios</a>
-- <a href="https://www.npmjs.com/package/moment" target="_blank">moment</a>
+- <a href="https://www.npmjs.com/package/inquirer" target="_blank">inquirer
+- node-spotify-api
+- axios
+- moment
 
 
 Images:
