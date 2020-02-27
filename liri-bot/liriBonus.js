@@ -37,22 +37,37 @@ if (!process.argv[2]) {
         name: "value"
       }
     ]).then(function (inquirerRes) {
-      console.log(inquirerRes.function);
-      switch (inquirerRes.function) {
-        case "s":
-          if (!inquirerRes.value) {
-            getMeSpotify("What's my age again")
-          } else {
-            getMeSpotify(inquirerRes.value);
-          }
-          break;
-        case "concert-this":
-          getMyBands(inquirerRes.value);
-          break;
-        case "movie-this":
-          getMeMovie(inquirerRes.value);
-          break;
+      fs.appendFile("log.txt", " " + inquirerRes.function + ", " + inquirerRes.value, function(err){
+        if(err){
+          console.log(err);
+          
+        }
+      });
+      if (inquirerRes.function === "movie-this" || inquirerRes.function === "spotify-this-song" || inquirerRes.function === "concert-this") {
+        switch (inquirerRes.function) {
+          case "spotify-this-song":
+            if (!inquirerRes.value) {
+              getMeSpotify("What's my age again")
+            } else {
+              getMeSpotify(inquirerRes.value);
+            }
+            break;
+          case "concert-this":
+            getMyBands(inquirerRes.value);
+            break;
+          case "movie-this":
+            if (!inquirerRes.value) {
+              getMeMovie("Mr Nobody");
+            } else {
+              getMeMovie(inquirerRes.value);
+            }
+  
+            break;
+        }
       }
+    else{
+     return console.log("No function found");
+    }
     })
 }
 
@@ -82,25 +97,29 @@ var getArtistNames = function (artist) {
 
 // Function for running a Spotify search
 var getMeSpotify = function (songName) {
-
+  if (songName === undefined) {
+    songName = "What's my age again";
+  }
   console.log(songName);
 
-  // if (songName === undefined) {
-  //   songName = "What's my age again";
-  // }
-  //songName = 'I Want it That Way'
   spotify
     .search({
       type: 'track',
       query: songName
     })
     .then(function (response) {
-      console.log(response.tracks.items[0].album.artists);
+      var result = response.tracks.items[0]
+      console.log("artist(s): " + result.album.artists[0].name);
+      console.log("song name: " + result.name);
+      console.log("ablum name: " + result.album.name);
+      console.log("find on spotify: " + result.album.external_urls.spotify);
+
+
     })
     .catch(function (err) {
       console.log(err);
     });
-  spotify.search();
+  //spotify.search();
 };
 
 
@@ -131,6 +150,8 @@ var getMyBands = function (artist) {
 
       for (let i = 0; i < res.length; i++) {
         console.log(res[i].venue.name + ", " + res[i].venue.city + ", " + res[i].venue.region + ": " + moment(res[i].datetime).format("MM/DD/YYYY"));
+        console.log(" -------------------------------\n");
+        
       }
 
 
@@ -187,15 +208,15 @@ var getMeMovie = function (movieName) {
       var jsonData = response.data;
 
       //FIXME: Finish the code below
-    
-console.log("Movie title: " + jsonData.Title);
-console.log("Release Data: " + jsonData.Released);
-console.log("IMDB Rating: " + jsonData.Ratings[0].Value);
-console.log("Rotton Tomatoes: " + jsonData.Ratings[1].Value);
-console.log("Contry produced: " + jsonData.Country);
-console.log("Language: " +  jsonData.Language);
-console.log("Plot: " + jsonData.Plot);
-console.log("Actors: " + jsonData.Actors);
+
+      console.log("Movie title: " + jsonData.Title);
+      console.log("Release Data: " + jsonData.Released);
+      console.log("IMDB Rating: " + jsonData.Ratings[0].Value);
+      console.log("Rotton Tomatoes: " + jsonData.Ratings[1].Value);
+      console.log("Contry produced: " + jsonData.Country);
+      console.log("Language: " + jsonData.Language);
+      console.log("Plot: " + jsonData.Plot);
+      console.log("Actors: " + jsonData.Actors);
 
 
 
@@ -209,31 +230,45 @@ console.log("Actors: " + jsonData.Actors);
 };
 
 // Function for running a command based on text file
-var doWhatItSays = function () {
-  fs.readFile("random.txt", "utf8", function (error, data) {
-    console.log(data);
-    var dataArr = data.split(",");
-    if (dataArr.length === 2) {
-      pick(dataArr[0], dataArr[1]);
-    } else if (dataArr.length === 1) {
-      pick(dataArr[0]);
-    }
+// var doWhatItSays = function () {
+//   fs.readFile("random.txt", "utf8", function (error, data) {
+//    // console.log(data);
+//     var dataArr = data.split(",");
+
+//     if (dataArr.length === 2) {
+//       pick(dataArr[0], dataArr[1]);
+//     } else if (dataArr.length === 1) {
+//       pick(dataArr[0]);
+//     }
 
 
-  });
-  
+//   });
 
-  
-};
 
-if (process.argv[2] === "do-what-it-says") {
-  doWhatItSays();
-}
+
+
+// };
+
+
 // Function for determining which command is executed
 var pick = function (command, commandData) {
   //TODO:  Write your code below
   // This will be the main function to control which method to call. See function "runThis" is calling this pick method
+  if (command === "do-what-it-says") {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+      var dataArr = data.split(",");
+      commandData = dataArr[1];
+      getMeSpotify(commandData);
+      fs.appendFile("log.txt", " " + command + ", " + commandData, function(err){
+        if(err){
+          console.log(err);
+          
+        }
+      });
+    })
 
+  
+  }
 
 };
 
@@ -245,4 +280,3 @@ var runThis = function (argOne, argTwo) {
 // MAIN PROCESS
 // =====================================
 runThis(process.argv[2], process.argv.slice(3).join(" "));
-
