@@ -28,5 +28,12 @@ After you enter a function and a value You will see infomation on what You enter
 
 EX. If You use the spotify-this-song function You the App will search the spotify API and return infomation of the song including a spotify link to the album the song is in.
 You will see the pictures below for a screenshot of the output of all of the functions.
-
+Side note if you leave the value blank it will show a preset output.
 Bonus if You enter node (fileName.js) do-what-it-says You will see a the song: I Want it That Way in spotify format.
+
+Dependencys used:
+- inquirer
+- node-spotify-api
+- axios
+- moment
+- fs
