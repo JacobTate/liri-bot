@@ -40,3 +40,19 @@ Dependencys used:
 - fs
 
 Images:
+
+movie-this Function:
+
+<img src="images/movie-this.png">
+
+concert-this Function:
+
+<img src="images/concert-this.png">
+
+spotify-this-song Function:
+
+<img src="images/spotify-this-song.png">
+
+do-what-it-says Function (no inquirer)
+
+<img src="images/do-what-it-says.png">
