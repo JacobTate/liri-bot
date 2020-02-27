@@ -2,8 +2,8 @@
  LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface.
  
  lIRI is a node command line application that takes a command (song movie ect.) and outputs info from an api.
- LIRI also uses the npm package inqurer.
- https://www.npmjs.com/package/inquirer
+ LIRI also uses the npm package <a href="https://www.npmjs.com/package/inquirer" target="_blank">inqurer.</a>
+ 
  
  Commands using inqurer:
  
@@ -30,6 +30,7 @@ EX. If You use the spotify-this-song function You the App will search the spotif
 You will see the pictures below for a screenshot of the output of all of the functions.
 Side note if you leave the value blank it will show a preset output.
 Bonus if You enter node (fileName.js) do-what-it-says You will see a the song: I Want it That Way in spotify format.
+Here is a <a href="https://youtu.be/Tu2cmcbT_rM" target="_blank">video</a> showing all of the functions 
 
 Dependencys used:
 - inquirer
@@ -37,3 +38,5 @@ Dependencys used:
 - axios
 - moment
 - fs
+
+Images:
