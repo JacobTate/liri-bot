@@ -13,8 +13,13 @@ You will see a prompt asking You to input a function
 Functions:
 
 - spotify-this-song,
+(when a song is entered if runs thruogh the spotify api and displays infomation on the song)
+
 - movie-this,
+(when a movie is entered the runs through the omdb api and displays infomation on the movie)
+
 - concert-this
+(when a band/singer name is entered the runs through the bandsintown api and displays infomation on the band/singer)
 
 After You enter a function You will be pormped to enter a value.
 
